@@ -1,8 +1,8 @@
 # Compiler options
-CC=clang++
-CFLAGS=-c -Wall
+CC=g++
+CFLAGS=-c -Wall -std=c++11
 INC=-I../include
-LDFLAGS=
+LDFLAGS=-lglfw -lgl -lGLEW
 TARGET=bisera-client
 
 OBJS=bisera.o game.o
