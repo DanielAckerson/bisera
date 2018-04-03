@@ -9,7 +9,7 @@
 
 int main(void)
 {
-    Game g();
+    Game g;
     GLFWwindow* window;
 
     /* Initialize the library */

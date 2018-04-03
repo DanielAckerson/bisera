@@ -1,3 +1,7 @@
 #GLFW
-    clone https://github.com/glfw/glfw.git to lib folder
-    copy contents of glfw/include to include folder
+    install libglfw3 (or whatever its called on ubuntu)
+    install libglfw-dev (to get the necessary headers)
+
+#GLEW
+    install libglew-dev
+
