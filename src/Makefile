@@ -3,7 +3,7 @@ CC=clang++
 CFLAGS=-c -Wall -std=c++11
 INC=-I../include
 LDFLAGS=-lglfw -lGL -lGLEW
-TARGET=bisera-client
+TARGET=../bin/bisera-client
 
 OBJS=bisera.o game.o
 
