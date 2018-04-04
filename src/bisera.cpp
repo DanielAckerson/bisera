@@ -10,7 +10,8 @@ int main(void)
 {
     try {
         Game bisera;
-        bisera.start();
+        bisera.init();
+        bisera.loop();
     } catch(const char *msg) {
         std::cerr << msg << std::endl;
         return 1;
