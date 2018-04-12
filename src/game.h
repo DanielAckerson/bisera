@@ -2,9 +2,19 @@
 #define GAME_H
 
 #include <GLFW/glfw3.h>
-#include <chrono>
+#include <chrono> //switch to glfwGetTime if need faster clock
+#include <ratio>
 #include <vector>
+#include <memory> //shared_ptr
 
+/* #include "gamestate.h" */
+#include "render.h" //Renderer, Renderable
+
+/* Handling keyboard/joystick input per GameState
+ *  set glfw user pointer to Game* instance
+ *  each state must handle inputs
+ *  only get input from gamestate on top of stack
+ */
 class GameState;
 
 class Game {
@@ -12,15 +22,16 @@ class Game {
     GLFWmonitor *monitor;
 
     bool running;
-    std::vector<GameState *> states;
+    std::vector<std::shared_ptr<GameState>> states;
 
-    using Clock = std::chrono::high_resolution_clock;
-    //Clock::time_point startTime;
+    using gclock = std::chrono::steady_clock;
+    using update_t = std::chrono::duration<double, std::ratio<1,100>>;
+    //gclock::time_point startTime;
 
 public:
     void init();
     void close();
-    void loop();
+    void run();
 
     void changeState(GameState *state);
     void pushState(GameState *state);
@@ -33,7 +44,7 @@ public:
     void update();
     void handleEvents();
 
-    bool isRunning() { return running; }
+    bool isRunning() const { return running; }
     void quit() { running = false; }
 
 public:

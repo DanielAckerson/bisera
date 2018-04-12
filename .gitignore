@@ -1,5 +1,3 @@
 *.o
-bisera-client
-build
-lib/*
 bin/*
+tags

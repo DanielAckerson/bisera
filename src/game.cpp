@@ -9,20 +9,6 @@ Game::Game()
     if(!glfwInit()) {
         throw "error: failed to init glfw";
     }
-    std::cout << "Game created!" << std::endl;
-}
-
-
-Game::~Game() {
-    if(running) {
-        close();
-    }
-    glfwTerminate();
-    std::cout << "Game destroyed!" << std::endl;
-}
-
-
-void Game::init() {
     // set monitor for fullscreen
     // for borderless window, see http://www.glfw.org/docs/latest/window_guide.html#window_windowed_full_screen
     /* monitor = glfwGetPrimaryMonitor(); */
@@ -33,27 +19,58 @@ void Game::init() {
         glfwTerminate();
         throw "error: failed to create window";
     }
-
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+
     running = true;
     pushState(new MainMenu_State());
-    std::cout << "Game initialized!" << std::endl;
+    std::cout << "Game created!" << std::endl;
 }
 
 
-void Game::close() {
+Game::~Game() {
+    /*
+    if(running) {
+        close();
+    }
+    */
+    glfwTerminate();
+    std::cout << "Game destroyed!" << std::endl;
 }
 
 
-void Game::loop() {
-    /* Loop until the user closes the window */
-    int counter = 0;
+void Game::run() {
+    using namespace std::chrono;
+    const update_t dt(1.0);
+    update_t t(0.0);
+    update_t accumulator(0.0);
+    auto currentTime = gclock::now();
+
+    int updates = 0;
+    int fps = 0;
+
     while(running) {
-        std::cout << "looped " << counter << " times" << std::endl;
-        update();
+        auto newTime = gclock::now();
+        auto frameTime = duration_cast<update_t>(newTime - currentTime);
+        currentTime = newTime;
+        accumulator += frameTime;
+
+        while(accumulator >= dt) {
+            //integrate(state, t, dt);
+            update();
+            accumulator -= dt;
+            t += dt;
+            updates++;
+            if(updates >= 100) {
+                std::cout   << "centiseconds to update: " << frameTime.count()
+                            << ", fps: " << fps << std::endl;
+                updates = 0;
+                fps = 0;
+            }
+        }
         render();
-        counter++;
+        fps++;
+        //render(state);
     }
 }
 
@@ -74,7 +91,11 @@ void Game::render() {
     /* Render here */
     glClear(GL_COLOR_BUFFER_BIT);
 
-    /* Swap front and back buffers */
+    /* Swap front and back buffers
+     * Vsync by default
+     * to turn off Vsync set glfwSwapInterval(0)
+     * to turn back on, set glfwSwapInterval(1) (i think)
+     */
     glfwSwapBuffers(window);
 }
 

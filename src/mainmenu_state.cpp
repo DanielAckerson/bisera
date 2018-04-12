@@ -1,10 +1,13 @@
 #include "mainmenu_state.h"
 
+#include <iostream>
+
 MainMenu_State::MainMenu_State() {
 }
 
 
 MainMenu_State::~MainMenu_State() {
+    std::cout << "state destroyed" << std::endl;
 }
 
 
