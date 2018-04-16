@@ -8,6 +8,7 @@
 #include <memory> //shared_ptr
 
 /* #include "gamestate.h" */
+#include "mainwindow.h"
 #include "render.h" //Renderer, Renderable
 
 /* Handling keyboard/joystick input per GameState
@@ -18,20 +19,15 @@
 class GameState;
 
 class Game {
-    GLFWwindow *window;
-    GLFWmonitor *monitor;
-
-    bool running;
     std::vector<std::shared_ptr<GameState>> states;
+    MainWindow window;
+    bool active;
 
     using gclock = std::chrono::steady_clock;
     using update_t = std::chrono::duration<double, std::ratio<1,100>>;
-    //gclock::time_point startTime;
 
 public:
-    void init();
-    void close();
-    void run();
+    void start();
 
     void changeState(GameState *state);
     void pushState(GameState *state);
@@ -44,12 +40,16 @@ public:
     void update();
     void handleEvents();
 
-    bool isRunning() const { return running; }
-    void quit() { running = false; }
+    inline bool isActive() const { return active; }
+    inline void quit() { active = false; }
 
 public:
     Game();
     ~Game();
+
+    //prevent copying
+    Game(const Game &) = delete;
+    Game &operator=(const Game &) = delete;
 };
 
 #include "gamestate.h"

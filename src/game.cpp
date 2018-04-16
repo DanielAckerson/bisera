@@ -3,26 +3,14 @@
 
 #include <iostream>
 
-Game::Game()
-:   window(nullptr), monitor(nullptr), running(false) {
-    /* Initialize glfw */
-    if(!glfwInit()) {
-        throw "error: failed to init glfw";
+Game::Game() {
+    try {
+        window = new MainWindow();
+    } catch (const char *err) {
+        std::cerr << err << endl;
+        throw "error: failed to create game";
     }
-    // set monitor for fullscreen
-    // for borderless window, see http://www.glfw.org/docs/latest/window_guide.html#window_windowed_full_screen
-    /* monitor = glfwGetPrimaryMonitor(); */
-
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", monitor, NULL);
-    if(!window) {
-        glfwTerminate();
-        throw "error: failed to create window";
-    }
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-
-    running = true;
+    active = true;
     pushState(new MainMenu_State());
     std::cout << "Game created!" << std::endl;
 }
@@ -30,16 +18,15 @@ Game::Game()
 
 Game::~Game() {
     /*
-    if(running) {
+    if(active) {
         close();
     }
     */
-    glfwTerminate();
     std::cout << "Game destroyed!" << std::endl;
 }
 
 
-void Game::run() {
+void Game::start() {
     using namespace std::chrono;
     const update_t dt(1.0);
     update_t t(0.0);
@@ -49,7 +36,7 @@ void Game::run() {
     int updates = 0;
     int fps = 0;
 
-    while(running) {
+    while(active) {
         auto newTime = gclock::now();
         auto frameTime = duration_cast<update_t>(newTime - currentTime);
         currentTime = newTime;
@@ -57,6 +44,7 @@ void Game::run() {
 
         while(accumulator >= dt) {
             //integrate(state, t, dt);
+            handleEvents();
             update();
             accumulator -= dt;
             t += dt;
@@ -101,7 +89,6 @@ void Game::render() {
 
 
 void Game::update() {
-    handleEvents();
     if(glfwWindowShouldClose(window)) {
         quit();
     }

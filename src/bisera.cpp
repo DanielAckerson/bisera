@@ -17,7 +17,7 @@ int main(void)
 {
     try {
         Game bisera;
-        bisera.run();
+        bisera.start();
     } catch(const char *err) {
         std::cerr << err << std::endl;
         return 1;
