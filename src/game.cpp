@@ -11,7 +11,7 @@ Game::Game() {
         throw "error: failed to create game";
     }
     active = true;
-    pushState(new MainMenu_State());
+    pushState(std::make_shared<MainMenu_State>());
     std::cout << "Game created!" << std::endl;
 }
 
@@ -63,21 +63,46 @@ void Game::start() {
 }
 
 
-void Game::changeState(GameState *state) {
+void Game::changeState(std::shared_ptr<GameState> &state) {
+    popState();
+    pushState(state);
 }
 
 
-void Game::pushState(GameState *state) {
+void Game::pushState(std::shared_ptr<GameState> &state) {
+    states.back()->pause();
+    states.push_back(state);
 }
 
 
 void Game::popState() {
+    if(!states.empty()) {
+        states.pop_back();
+    }
+}
+
+
+void Game::pause() {
+    states.back()->pause();
+}
+
+
+void Game::resume() {
+    states.back()->resume();
 }
 
 
 void Game::render() {
     /* Render here */
     glClear(GL_COLOR_BUFFER_BIT);
+
+    /* render top state.
+     * top state is responsible for rendering any
+     *  states that should be rendered in background
+     *  (e.g. pauseMenu is top state but the paused
+     *  world is still rendered in background).
+     */
+    states.back()->render(this);
 
     /* Swap front and back buffers
      * Vsync by default
@@ -92,10 +117,12 @@ void Game::update() {
     if(glfwWindowShouldClose(window)) {
         quit();
     }
+    states.back()->update(this);
 }
 
 
 void Game::handleEvents() {
     /* Poll for and process events */
     glfwPollEvents();
+    states.back()->handleEvents(this);
 }

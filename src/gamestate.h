@@ -7,31 +7,27 @@
 
 class GameState {
 public:
-    virtual void init() = 0;
-    virtual void close() = 0;
+    // these are done in ctor & dtor so they're probably not necessary
+    /* virtual void init() = 0; */
+    /* virtual void close() = 0; */
 
     virtual void pause() = 0;
-    virtual void play() = 0;
+    virtual void resume() = 0;
     
     virtual void render(Game *game) = 0;
     virtual void update(Game *game) = 0;
     virtual void handleEvents(Game *game) = 0;
 
-    /* void changeState(Game *game, GameState *state); */
-
-    void changeState(Game *game, GameState *state) {
+    /* not needed because you can just call the public Game::changeState
+    void changeState(Game *game, std::shared_ptr<GameState> &state) {
         game->changeState(state);
     }
+    */
 
 protected:
     GameState() {}
 };
 
 /* #include "game.h" */
-
-/* void GameState::changeState(Game *game, GameState *state) { */
-/*     game->changeState(state); */
-/* } */
-
 
 #endif//GAMESTATE_H

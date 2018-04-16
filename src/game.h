@@ -10,13 +10,13 @@
 /* #include "gamestate.h" */
 #include "mainwindow.h"
 #include "render.h" //Renderer, Renderable
+#include "gamestate.h"
 
 /* Handling keyboard/joystick input per GameState
  *  set glfw user pointer to Game* instance
  *  each state must handle inputs
  *  only get input from gamestate on top of stack
  */
-class GameState;
 
 class Game {
     std::vector<std::shared_ptr<GameState>> states;
@@ -29,12 +29,37 @@ class Game {
 public:
     void start();
 
-    void changeState(GameState *state);
-    void pushState(GameState *state);
+    /* changeState pops top state and pushes new one
+     */
+    void changeState(std::shared_ptr<GameState> &state);
+
+    /* pushState loads new state on top of stack.
+     * pauses states below.
+     */
+    void pushState(std::shared_ptr<GameState> &state);
+
+    /* popState unloads top state.
+     * plays state below.
+     */
     void popState();
 
+    /* pause prevents update from being called.
+     *  events will still be handled
+     *  haven't decided if pause also prevents render
+     *
+     * pause should only be called when window loses focus
+     *  or explicitly from same scope as the Game object
+     *  (i.e. game.pause() is fine but game->pause() is undefined behavior)
+     */
     void pause();
-    void play();
+    
+    /* resume allows game to update (and render?) again
+     * 
+     * resume should only be called when window regains focus
+     *  or explicitly from same scope as the Game object
+     *  (i.e. game.resume() is fine but game->resume() is undefined behavior()
+     */
+    void resume();
 
     void render();
     void update();
@@ -52,6 +77,5 @@ public:
     Game &operator=(const Game &) = delete;
 };
 
-#include "gamestate.h"
 
 #endif//GAME_H

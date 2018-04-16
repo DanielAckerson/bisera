@@ -5,11 +5,8 @@
 
 class MainMenu_State : public GameState {
 public:
-    virtual void init();
-    virtual void close();
-
     virtual void pause();
-    virtual void play();
+    virtual void resume();
     
     virtual void render(Game *game);
     virtual void update(Game *game);
