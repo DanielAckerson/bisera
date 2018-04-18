@@ -3,7 +3,7 @@
 #include <iostream>
 
 MainWindow::MainWindow()
-:   window(nullptr), monitor(nullptr) {
+:   window(nullptr), monitor(nullptr), width(1280), height(720) {
     /* Initialize glfw */
     if(!glfwInit()) {
         throw "error: failed to init glfw";
@@ -13,15 +13,21 @@ MainWindow::MainWindow()
     /* monitor = glfwGetPrimaryMonitor(); */
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", monitor, NULL);
+    window = glfwCreateWindow(width, height, "Bisera", monitor, NULL);
     if(!window) {
         glfwTerminate();
         throw "error: failed to create window";
     }
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+    if(!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+        glfwTerminate();
+        throw "error: failed to load OpenGL with glad";
+    }
+    glViewport(0, 0, width, height);
     /* Set user pointer to reference this instance from static calls*/
-    glfwSetWindowUserPointer(this);
+    /* this is useless. maybe point to input handler instead */
+    //glfwSetWindowUserPointer(window, this);
     std::cout << "MainWindow created!" << std::endl;
 }
 

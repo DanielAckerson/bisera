@@ -24,7 +24,8 @@ void MainMenu_State::resume() {
 
 
 void MainMenu_State::render(Game *game) {
-    auto window = reinterpret_cast<MainWindow *>(glfwGetWindowUserPointer());
+    // this can't work because glfwGetWindowUserPointer needs the GLFWwindow*
+    //auto window = reinterpret_cast<MainWindow *>(glfwGetWindowUserPointer());
 }
 
 

@@ -1,9 +1,9 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-/* class Game; */
+class Game;
 
-#include "game.h"
+/* #include "game.h" */
 
 class GameState {
 public:
@@ -28,6 +28,6 @@ protected:
     GameState() {}
 };
 
-/* #include "game.h" */
+#include "game.h"
 
 #endif//GAMESTATE_H

@@ -7,11 +7,12 @@ Game::Game() {
     try {
         window = new MainWindow();
     } catch (const char *err) {
-        std::cerr << err << endl;
+        std::cerr << err << std::endl;
         throw "error: failed to create game";
     }
     active = true;
-    pushState(std::make_shared<MainMenu_State>());
+    auto mainMenu = std::make_shared<MainMenu_State>();
+    pushState(mainMenu);
     std::cout << "Game created!" << std::endl;
 }
 
@@ -22,6 +23,7 @@ Game::~Game() {
         close();
     }
     */
+    delete window;
     std::cout << "Game destroyed!" << std::endl;
 }
 
@@ -63,14 +65,16 @@ void Game::start() {
 }
 
 
-void Game::changeState(std::shared_ptr<GameState> &state) {
+void Game::changeState(std::shared_ptr<GameState> state) {
     popState();
     pushState(state);
 }
 
 
-void Game::pushState(std::shared_ptr<GameState> &state) {
-    states.back()->pause();
+void Game::pushState(std::shared_ptr<GameState> state) {
+    if(!states.empty()) {
+        states.back()->pause();
+    }
     states.push_back(state);
 }
 
@@ -109,12 +113,12 @@ void Game::render() {
      * to turn off Vsync set glfwSwapInterval(0)
      * to turn back on, set glfwSwapInterval(1) (i think)
      */
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(window->context());
 }
 
 
 void Game::update() {
-    if(glfwWindowShouldClose(window)) {
+    if(glfwWindowShouldClose(window->context())) {
         quit();
     }
     states.back()->update(this);

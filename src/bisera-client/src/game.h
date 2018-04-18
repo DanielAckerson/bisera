@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <chrono> //switch to glfwGetTime if need faster clock
 #include <ratio>
@@ -20,7 +21,7 @@
 
 class Game {
     std::vector<std::shared_ptr<GameState>> states;
-    MainWindow window;
+    MainWindow *window;
     bool active;
 
     using gclock = std::chrono::steady_clock;
@@ -31,12 +32,12 @@ public:
 
     /* changeState pops top state and pushes new one
      */
-    void changeState(std::shared_ptr<GameState> &state);
+    void changeState(std::shared_ptr<GameState> state);
 
     /* pushState loads new state on top of stack.
      * pauses states below.
      */
-    void pushState(std::shared_ptr<GameState> &state);
+    void pushState(std::shared_ptr<GameState> state);
 
     /* popState unloads top state.
      * plays state below.
