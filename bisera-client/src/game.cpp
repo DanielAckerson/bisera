@@ -30,17 +30,17 @@ Game::~Game() {
 
 void Game::start() {
     using namespace std::chrono;
-    const update_t dt(1.0);
-    update_t t(0.0);
-    update_t accumulator(0.0);
-    auto currentTime = gclock::now();
+    const Tick dt(1.0);
+    Tick t(0.0);
+    Tick accumulator(0.0);
+    auto currentTime = Clock::now();
 
     int updates = 0;
     int fps = 0;
 
     while(active) {
-        auto newTime = gclock::now();
-        auto frameTime = duration_cast<update_t>(newTime - currentTime);
+        auto newTime = Clock::now();
+        auto frameTime = duration_cast<Tick>(newTime - currentTime);
         currentTime = newTime;
         accumulator += frameTime;
 
@@ -52,8 +52,7 @@ void Game::start() {
             t += dt;
             updates++;
             if(updates >= 100) {
-                std::cout   << "centiseconds to update: " << frameTime.count()
-                            << ", fps: " << fps << std::endl;
+                std::cout << fps << "fps"  << std::endl;
                 updates = 0;
                 fps = 0;
             }
@@ -120,6 +119,7 @@ void Game::render() {
 void Game::update() {
     if(glfwWindowShouldClose(window->context())) {
         quit();
+        return;
     }
     states.back()->update(this);
 }

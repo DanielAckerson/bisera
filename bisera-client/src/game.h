@@ -24,8 +24,8 @@ class Game {
     MainWindow *window;
     bool active;
 
-    using gclock = std::chrono::steady_clock;
-    using update_t = std::chrono::duration<double, std::ratio<1,100>>;
+    using Clock = std::chrono::steady_clock;
+    using Tick = std::chrono::duration<double, std::ratio<1,100>>;
 
 public:
     void start();
