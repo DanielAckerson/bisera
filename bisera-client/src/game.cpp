@@ -18,11 +18,6 @@ Game::Game() {
 
 
 Game::~Game() {
-    /*
-    if(active) {
-        close();
-    }
-    */
     delete window;
     std::cout << "Game destroyed!" << std::endl;
 }
@@ -31,7 +26,6 @@ Game::~Game() {
 void Game::start() {
     using namespace std::chrono;
     const Tick dt(1.0);
-    Tick t(0.0);
     Tick accumulator(0.0);
     auto currentTime = Clock::now();
 
@@ -45,11 +39,9 @@ void Game::start() {
         accumulator += frameTime;
 
         while(accumulator >= dt) {
-            //integrate(state, t, dt);
             handleEvents();
             update();
             accumulator -= dt;
-            t += dt;
             updates++;
             if(updates >= 100) {
                 std::cout << fps << "fps"  << std::endl;
@@ -59,7 +51,6 @@ void Game::start() {
         }
         render();
         fps++;
-        //render(state);
     }
 }
 

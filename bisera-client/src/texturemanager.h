@@ -15,6 +15,10 @@ class TextureManager {
     std::unordered_map<std::string, GLuint> textures;
 
 public:
+    TextureManager();
+    ~TextureManager();
+
+public:
     /* Get texture from image file
      * Load texture into OpenGL
      * Enter texture ID in textures[name]
@@ -42,10 +46,6 @@ public:
     void removeShader(GLuint texID);
 
     GLuint getTexture(std::string name);
-
-public:
-    TextureManager();
-    ~TextureManager();
 };
 
 #endif//TEXTUREMANAGER_H

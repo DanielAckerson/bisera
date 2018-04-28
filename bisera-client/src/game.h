@@ -24,6 +24,14 @@ class Game {
     MainWindow *window;
     bool active;
 
+public:
+    Game();
+    ~Game();
+
+    //prevent copying
+    Game(const Game &) = delete;
+    Game &operator=(const Game &) = delete;
+
     using Clock = std::chrono::steady_clock;
     using Tick = std::chrono::duration<double, std::ratio<1,100>>;
 
@@ -68,14 +76,6 @@ public:
 
     inline bool isActive() const { return active; }
     inline void quit() { active = false; }
-
-public:
-    Game();
-    ~Game();
-
-    //prevent copying
-    Game(const Game &) = delete;
-    Game &operator=(const Game &) = delete;
 };
 
 

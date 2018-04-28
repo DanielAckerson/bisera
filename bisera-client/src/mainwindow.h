@@ -10,11 +10,11 @@ class MainWindow {
     GLuint width, height;
 
 public:
-    inline GLFWwindow *context() { return window; }
-
-public:
     MainWindow();
     ~MainWindow();
+
+public:
+    inline GLFWwindow *context() { return window; }
 };
 
 #endif//MAINWINDOW_H

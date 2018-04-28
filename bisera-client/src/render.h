@@ -1,31 +1,28 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "mainwindow.h"
 
-class Game;
+#include <vector>
 
 class Renderable {
-public:
-    virtual void render() = 0;
 protected:
     Renderable();
+public:
+    virtual void render() = 0;
 };
 
 
 class Renderer {
-    Game *game;
-public:
-    virtual void render();
+    MainWindow *window;
     
 public:
-    Renderer();
-    ~Renderer();
+    Renderer(MainWindow *window);
 
     friend class Renderable;
-};
 
-#include "game.h"
+public:
+    virtual void render(const std::vector<Renderable> &renderables);
+};
 
 #endif//RENDER_H
