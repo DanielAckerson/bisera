@@ -1,27 +1,36 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <chrono> //switch to glfwGetTime if need faster clock
+#include <chrono>   //switch to glfwGetTime if need faster clock
 #include <ratio>
 #include <vector>
-#include <memory> //shared_ptr
+#include <memory>   //unique_ptr
 
-/* #include "gamestate.h" */
 #include "mainwindow.h"
-#include "render.h" //Renderer, Renderable
-#include "gamestate.h"
 
-/* Handling keyboard/joystick input per GameState
- *  set glfw user pointer to Game* instance
- *  each state must handle inputs
- *  only get input from gamestate on top of stack
- */
+class Game;
+
+class GameState {
+protected:
+    Game *game;
+
+public:
+    GameState(Game *game) : game(game) {}
+    virtual ~GameState() {}
+
+public:
+    virtual void pause() = 0;
+    virtual void resume() = 0;
+    
+    virtual void render() = 0;
+    virtual void update() = 0;
+    virtual void handleEvents() = 0;
+};
+
 
 class Game {
-    std::vector<std::shared_ptr<GameState>> states;
-    MainWindow *window;
+    std::vector<std::unique_ptr<GameState>> states;
+    std::unique_ptr<MainWindow> window;
     bool active;
 
 public:
@@ -39,16 +48,18 @@ public:
     void start();
 
     /* changeState pops top state and pushes new one
+     * may need to queue state for removal
      */
-    void changeState(std::shared_ptr<GameState> state);
+    void changeState(GameState *state);
 
     /* pushState loads new state on top of stack.
      * pauses states below.
      */
-    void pushState(std::shared_ptr<GameState> state);
+    void pushState(GameState *state);
 
     /* popState unloads top state.
      * plays state below.
+     * may need to queue state for removal
      */
     void popState();
 
@@ -77,6 +88,5 @@ public:
     inline bool isActive() const { return active; }
     inline void quit() { active = false; }
 };
-
 
 #endif//GAME_H

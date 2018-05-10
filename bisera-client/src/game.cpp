@@ -5,20 +5,18 @@
 
 Game::Game() {
     try {
-        window = new MainWindow();
-    } catch (const char *err) {
+        window = std::make_unique<MainWindow>();
+    } catch(const char *err) {
         std::cerr << err << std::endl;
         throw "error: failed to create game";
     }
     active = true;
-    auto mainMenu = std::make_shared<MainMenu_State>();
-    pushState(mainMenu);
+    pushState(new MainMenu_State(this));
     std::cout << "Game created!" << std::endl;
 }
 
 
 Game::~Game() {
-    delete window;
     std::cout << "Game destroyed!" << std::endl;
 }
 
@@ -28,22 +26,18 @@ void Game::start() {
     const Tick dt(1.0);
     Tick accumulator(0.0);
     auto currentTime = Clock::now();
-
     int updates = 0;
     int fps = 0;
-
     while(active) {
         auto newTime = Clock::now();
         auto frameTime = duration_cast<Tick>(newTime - currentTime);
         currentTime = newTime;
         accumulator += frameTime;
-
         while(accumulator >= dt) {
             handleEvents();
             update();
             accumulator -= dt;
-            updates++;
-            if(updates >= 100) {
+            if(++updates >= 100) {
                 std::cout << fps << "fps"  << std::endl;
                 updates = 0;
                 fps = 0;
@@ -55,34 +49,47 @@ void Game::start() {
 }
 
 
-void Game::changeState(std::shared_ptr<GameState> state) {
-    popState();
-    pushState(state);
+// if previous state, assumes paused
+// else pushes new state
+void Game::changeState(GameState *state) {
+    if(!states.empty()) {
+        states.pop_back();
+    }
+    states.emplace_back(state);
 }
 
 
-void Game::pushState(std::shared_ptr<GameState> state) {
-    if(!states.empty()) {
-        states.back()->pause();
-    }
-    states.push_back(state);
+void Game::pushState(GameState *state) {
+    pause();
+    states.emplace_back(state);
 }
 
 
 void Game::popState() {
     if(!states.empty()) {
         states.pop_back();
+    } else {
+        std::cerr << "error: no GameState to pop" << std::endl;
     }
+    resume();
 }
 
 
 void Game::pause() {
-    states.back()->pause();
+    if(!states.empty()) {
+        states.back()->pause();
+    } else {
+        std::cerr << "error: no GameState to pause" << std::endl;
+    }
 }
 
 
 void Game::resume() {
-    states.back()->resume();
+    if(!states.empty()) {
+        states.back()->resume();
+    } else {
+        std::cerr << "error: no GameState to resume" << std::endl;
+    }
 }
 
 
@@ -96,7 +103,7 @@ void Game::render() {
      *  (e.g. pauseMenu is top state but the paused
      *  world is still rendered in background).
      */
-    states.back()->render(this);
+    states.back()->render();
 
     /* Swap front and back buffers
      * Vsync by default
@@ -112,12 +119,12 @@ void Game::update() {
         quit();
         return;
     }
-    states.back()->update(this);
+    states.back()->update();
 }
 
 
 void Game::handleEvents() {
-    /* Poll for and process events */
+    //Poll for and process events
     glfwPollEvents();
-    states.back()->handleEvents(this);
+    states.back()->handleEvents();
 }
