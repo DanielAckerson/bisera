@@ -52,9 +52,8 @@ void Game::start() {
 // if previous state, assumes paused
 // else pushes new state
 void Game::changeState(GameState *state) {
-    if(!states.empty()) {
+    if(!states.empty())
         states.pop_back();
-    }
     states.emplace_back(state);
 }
 
@@ -66,30 +65,23 @@ void Game::pushState(GameState *state) {
 
 
 void Game::popState() {
-    if(!states.empty()) {
+    if(!states.empty())
         states.pop_back();
-    } else {
-        std::cerr << "error: no GameState to pop" << std::endl;
-    }
+    else
+        throw "error: no GameState to pop";
     resume();
 }
 
 
 void Game::pause() {
-    if(!states.empty()) {
+    if(!states.empty())
         states.back()->pause();
-    } else {
-        std::cerr << "error: no GameState to pause" << std::endl;
-    }
 }
 
 
 void Game::resume() {
-    if(!states.empty()) {
+    if(!states.empty())
         states.back()->resume();
-    } else {
-        std::cerr << "error: no GameState to resume" << std::endl;
-    }
 }
 
 
