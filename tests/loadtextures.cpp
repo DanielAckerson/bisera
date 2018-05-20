@@ -61,32 +61,37 @@ int main() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 
+//link data from vertices[] to shader program
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
+
 //load shader program
     GLuint program = loadShader(
         "assets/loadtextures.vs",
         "assets/loadtextures.fs");
+    glUseProgram(program);
 
 //load textures
-    GLuint checkered_texID = loadTexture("assets/loadtextures_chepckered.png");
+    GLuint checkered_texID = loadTexture("assets/loadtextures_checkered.png");
+    cout << "texture loaded" << endl;
     /* GLuint checkered_texID = loadTexture(colors, 2, 2); */
     glUniform1i(glGetUniformLocation(program, "myTextureSampler"), 0);
 
-//link data from vertices[] to shader program
-    GLint posAttrib = glGetAttribLocation(program, "position");
-    glEnableVertexAttribArray(posAttrib);
-    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
-
-    GLint texAttrib = glGetAttribLocation(program, "vertexUV");
-    glEnableVertexAttribArray(texAttrib);
-    glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
-
-        glUseProgram(program);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+//test if only vao needs to be bound
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    
 //render
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         glClear(GL_COLOR_BUFFER_BIT);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); //draws currently bound element array buffer
+        //draws currently bound element array buffer
+        //  requires vao, vbo, and ebo bound
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);
     }
 
@@ -145,6 +150,7 @@ bool createContext(GLFWwindow **window, const char *title, int width, int height
 
 
 GLuint loadTexture(const char *filename) {
+    cout << "Loading Texture: " << filename << endl;
     GLuint texID;
     std::vector<unsigned char> image;
     unsigned int width, height;
