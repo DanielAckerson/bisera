@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <string>
 #include <unordered_map>
-
+#include <utility>
 
 /* maybe return void for the addShader methods
  * that way, threads/promises/futures can be used
@@ -12,7 +12,10 @@
  */
 
 class ShaderManager {
-    std::unordered_map<std::string, GLuint> shaders;
+    // Maps shader program name to std::pair of program ID and reference count
+    std::unordered_map<std::string, std::pair<GLuint,int>> programs;
+    //can only cache with load, not with loadInline
+    std::unordered_map<std::string, GLuint> shaderCache;
 
 public:
     ShaderManager();
@@ -24,27 +27,24 @@ public:
      * Enter shader program ID in shaders[name]
      * return program ID
      */
-    GLuint loadShader(std::string name, std::string vertexPath std::string fragmentPath);
+    void load(std::string name, std::string vertexPath, std::string fragmentPath);
     /* Pass whole shader programs as strings
      * Load shaders into OpenGL
      * Enter shader program ID in shaders[name]
      * return program ID
      */
-    GLuint loadShaderInline(std::string name, std::string vertexProgram, std::string fragmentProgram);
+    void loadInline(std::string name, std::string vertexSource, std::string fragmentSource);
 
     /* Find shader program by name
      * Delete shader program from OpenGL
      * Delete shader program entry from shaders
      */
-    void deleteShader(std::string name);
+    void disown(std::string name);
 
-    /* Find first occurence of shader program by programID
-     * Delete shader program from OpenGL
-     * Delete shader program entry from shaders
+    /* Find shader program by name
+     * Tell OpenGL to use that program
      */
-    void deleteShader(GLuint programID);
-
-    GLuint getShader(std::string name);
+    void useProgram(std::string name);
 };
 
 #endif//SHADERMANAGER_H
