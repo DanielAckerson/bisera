@@ -18,9 +18,17 @@ public:
     };
 
 public:
+    Mesh();
     Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices);
     Mesh(const std::string &objFilePath);
+    Mesh(Mesh &&mesh);
+
+    Mesh &operator=(Mesh &&mesh);
+
     virtual ~Mesh();
+
+    Mesh(const Mesh &) = delete;
+    Mesh &operator=(const Mesh &) = delete;
 
 public:
     void bind() const;

@@ -3,6 +3,11 @@
 #include <iostream>
 #include <fstream>
 
+Mesh::Mesh()
+:   VAO(0), VBO(0), EBO(0) {
+}
+
+
 Mesh::Mesh(const std::vector<Mesh::Vertex> &vertices, const std::vector<unsigned int> &indices) {
     assert(!vertices.empty() && !indices.empty() && indices.size() % 3 == 0);
     //gen IDs
@@ -31,6 +36,27 @@ Mesh::Mesh(const std::vector<Mesh::Vertex> &vertices, const std::vector<unsigned
 
 Mesh::Mesh(const std::string &objFilePath) {
     std::fstream fs(objFilePath);
+}
+
+
+Mesh::Mesh(Mesh &&mesh) {
+    VAO = mesh.VAO;
+    VBO = mesh.VBO;
+    EBO = mesh.EBO;
+    mesh.VAO = 0;
+    mesh.VBO = 0;
+    mesh.EBO = 0;
+}
+
+
+Mesh &Mesh::operator=(Mesh &&mesh) {
+    VAO = mesh.VAO;
+    VBO = mesh.VBO;
+    EBO = mesh.EBO;
+    mesh.VAO = 0;
+    mesh.VBO = 0;
+    mesh.EBO = 0;
+    return *this;
 }
 
 
