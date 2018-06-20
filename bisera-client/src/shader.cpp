@@ -1,22 +1,12 @@
-#include "shadermanager.h"
+#include "shader.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
-
-ShaderManager::ShaderManager() {
-}
-
-
-ShaderManager::~ShaderManager() {
-    for(auto &kv : shaders) {
-        glDeleteProgram(kv.second);
-    }
-}
-
+#include <utility>
 
 /* helper function for reading shaders
  */
-std::string readFile(std::string filePath) {
+std::string readFile(const std::string &filePath) {
     std::string content;
     std::ifstream fileStream(filePath, std::ios::in);
     if(!fileStream.is_open()) {
@@ -33,16 +23,18 @@ std::string readFile(std::string filePath) {
 }
 
 
-/* Get shaders from files
- * Load shaders into OpenGL
- * Enter shader program ID in shaders[name]
- * return program ID
- */
-void ShaderManager::load(std::string name, std::string vertexPath std::string fragmentPath) {
-    if(programs.count(name)) {
-        programs[name].second++;
-        return;
-    }
+Shader::Shader()
+    :   program(0) {}
+
+
+Shader::~Shader() {
+    glDeleteProgram(program);
+}
+
+
+//TODO throw if error
+//TODO box up redundant code
+Shader::Shader(std::string vertPath, std::string fragPath) {
     const std::string vertexSource = readFile(vertexPath),
     const std::string fragmentSource = readFile(fragmentPath);
     GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
@@ -50,7 +42,6 @@ void ShaderManager::load(std::string name, std::string vertexPath std::string fr
     GLint result = GL_FALSE;
     int logLength;
 
-    // Compile vertex shader
     std::cout << "Compiling vertex shader." << std::endl;
     glShaderSource(vertShader, 1, &vertexSource.c_str(), NULL);
     glCompileShader(vertShader);
@@ -62,7 +53,6 @@ void ShaderManager::load(std::string name, std::string vertexPath std::string fr
     glGetShaderInfoLog(vertShader, logLength, NULL, &vertShaderError[0]);
     std::cout << &vertShaderError[0] << std::endl;
 
-    // Compile fragment shader
     std::cout << "Compiling fragment shader." << std::endl;
     glShaderSource(fragShader, 1, &fragmentSource.c_str(), NULL);
     glCompileShader(fragShader);
@@ -74,14 +64,13 @@ void ShaderManager::load(std::string name, std::string vertexPath std::string fr
     glGetShaderInfoLog(fragShader, logLength, NULL, &fragShaderError[0]);
     std::cout << &fragShaderError[0] << std::endl;
 
-    // Link program
-    std::cout << "Linking program" << std::endl;
-    GLuint program = glCreateProgram();
+    std::cout << "Linking program." << std::endl;
+    program = glCreateProgram();
     glAttachShader(program, vertShader);
     glAttachShader(program, fragShader);
     glLinkProgram(program);
 
-    // Get any errors
+    // Check shader program
     glGetProgramiv(program, GL_LINK_STATUS, &result);
     glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
     std::vector<char> programError( (logLength > 1) ? logLength : 1 );
@@ -90,28 +79,19 @@ void ShaderManager::load(std::string name, std::string vertexPath std::string fr
 
     shaderCache[vertexPath] = vertShader;
     shaderCache[fragmentPath] = fragShader;
-    programs[name] = std::make_pair(program, 1);
 }
 
 
-/* Pass whole shader programs as strings
- * Load shaders into OpenGL
- * Enter shader program ID in shaders[name]
- * return program ID
- */
-void ShaderManager::loadInline(std::string name, const std::string &vertexSource, const std::string &fragmentSource) {
-    if(programs.count(name)) {
-        programs[name].second++;
-        return;
-    }
+//TODO throw if error
+//TODO box up redundant code
+Shader::Shader(std::string vertSrc, std::string fragSrc) {
     GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
     GLint result = GL_FALSE;
     int logLength;
 
-    // Compile vertex shader
     std::cout << "Compiling vertex shader." << std::endl;
-    glShaderSource(vertShader, 1, &vertexSource.c_str(), NULL);
+    glShaderSource(vertShader, 1, &vertSrc.c_str(), NULL);
     glCompileShader(vertShader);
 
     // Check vertex shader
@@ -121,9 +101,8 @@ void ShaderManager::loadInline(std::string name, const std::string &vertexSource
     glGetShaderInfoLog(vertShader, logLength, NULL, &vertShaderError[0]);
     std::cout << &vertShaderError[0] << std::endl;
 
-    // Compile fragment shader
     std::cout << "Compiling fragment shader." << std::endl;
-    glShaderSource(fragShader, 1, &fragmentSource.c_str(), NULL);
+    glShaderSource(fragShader, 1, &fragSrc.c_str(), NULL);
     glCompileShader(fragShader);
 
     // Check fragment shader
@@ -133,14 +112,13 @@ void ShaderManager::loadInline(std::string name, const std::string &vertexSource
     glGetShaderInfoLog(fragShader, logLength, NULL, &fragShaderError[0]);
     std::cout << &fragShaderError[0] << std::endl;
 
-    // Link program
-    std::cout << "Linking program" << std::endl;
+    std::cout << "Linking program." << std::endl;
     GLuint program = glCreateProgram();
     glAttachShader(program, vertShader);
     glAttachShader(program, fragShader);
     glLinkProgram(program);
 
-    // Get any errors
+    // Check shader program
     glGetProgramiv(program, GL_LINK_STATUS, &result);
     glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
     std::vector<char> programError( (logLength > 1) ? logLength : 1 );
@@ -153,17 +131,29 @@ void ShaderManager::loadInline(std::string name, const std::string &vertexSource
 }
 
 
-/* Find shader program by name
- * Delete shader program from OpenGL
- * Delete shader program entry from shaders
- */
-void ShaderManager::disown(std::string name) {
+// explicit move may not be necessary
+Shader::Shader(Shader &&shader) 
+    :   program(shader.program),
+        vertPath(std::move(shader.vertPath),
+        fragPath(std::move(shader.fragPath)) {
+    shader.program = 0;
 }
 
 
-/* Find shader program by name
- * Tell OpenGL to use that program
- */
-void ShaderManager::useProgram(std::string name) {
-    glUseProgram(programs.at(name));
+// explicit move may not be necessary
+Shader &Shader::operator=(Shader &&shader) {
+    program = shader.program;
+    vertPath = std::move(shader.vertPath);
+    fragPath = std::move(shader.fragPath);
+    shader.program = 0;
+}
+
+
+void Shader::bind() const {
+    glUseProgram(program);
+}
+
+
+//TODO Create new shader then move if OK
+void Shader::reload() {
 }
