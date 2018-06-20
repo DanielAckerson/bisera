@@ -8,7 +8,7 @@
 #include <string>
 
 class Mesh {
-    GLuint VAO, VBO, EBO;
+    GLuint vao, vbo, ebo;
 
 public:
     struct Vertex {
@@ -19,13 +19,12 @@ public:
 
 public:
     Mesh();
+    ~Mesh();
     Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices);
     Mesh(const std::string &objFilePath);
+
     Mesh(Mesh &&mesh);
-
     Mesh &operator=(Mesh &&mesh);
-
-    virtual ~Mesh();
 
     Mesh(const Mesh &) = delete;
     Mesh &operator=(const Mesh &) = delete;
