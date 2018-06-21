@@ -33,15 +33,19 @@ MainWindow::MainWindow()
 
     // The official code for "Setting Your Raster Position to a Pixel Location" (i.e. set up a camera for 2D screen)
     glViewport(0, 0, width, height);
+    /*
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, width, height, 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    */
 
     // Make some OpenGL properties better for 2D and enable alpha channel.
+    /*
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
+    */
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glDisable(GL_ALPHA_TEST);
