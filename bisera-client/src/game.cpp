@@ -1,5 +1,4 @@
 #include "game.h"
-#include "mainmenu_state.h"
 
 #include <iostream>
 
@@ -11,7 +10,6 @@ Game::Game() {
         throw "error: failed to create game";
     }
     active = true;
-    pushState(new MainMenu_State(this));
     std::cout << "Game created!" << std::endl;
 }
 
@@ -21,6 +19,7 @@ Game::~Game() {
 }
 
 
+//TODO loop only when active && there is at least one game state
 void Game::start() {
     using namespace std::chrono;
     const Tick dt(1.0);

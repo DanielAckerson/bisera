@@ -12,11 +12,13 @@
 #include <iostream>
 
 #include "game.h"
+#include "mainmenu_state.h"
 
 int main(void)
 {
     try {
         Game bisera;
+        bisera.pushState(new MainMenu_State(&bisera));
         bisera.start();
     } catch(const char *err) {
         std::cerr << err << std::endl;
