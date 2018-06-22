@@ -27,7 +27,7 @@ public:
     void unbind() const;
 
 private:
-    void createBuffer(const std::vector &image);
+    void createBuffer(const std::vector<unsigned char> &image);
 };
 
 #endif//TEXTURE_H

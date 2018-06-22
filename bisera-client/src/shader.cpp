@@ -34,16 +34,17 @@ Shader::~Shader() {
 
 //TODO throw if error
 //TODO box up redundant code
-Shader::Shader(std::string vertPath, std::string fragPath) {
-    const std::string vertexSource = readFile(vertexPath),
-    const std::string fragmentSource = readFile(fragmentPath);
+Shader::Shader(std::string vertPath, std::string fragPath) 
+    :   vertPath(vertPath), fragPath(fragPath) {
+    const char *vertSrc = readFile(vertPath).c_str();
+    const char *fragSrc = readFile(fragPath).c_str();
     GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
     GLint result = GL_FALSE;
     int logLength;
 
     std::cout << "Compiling vertex shader." << std::endl;
-    glShaderSource(vertShader, 1, &vertexSource.c_str(), NULL);
+    glShaderSource(vertShader, 1, &vertSrc, NULL);
     glCompileShader(vertShader);
 
     // Check vertex shader
@@ -54,7 +55,7 @@ Shader::Shader(std::string vertPath, std::string fragPath) {
     std::cout << &vertShaderError[0] << std::endl;
 
     std::cout << "Compiling fragment shader." << std::endl;
-    glShaderSource(fragShader, 1, &fragmentSource.c_str(), NULL);
+    glShaderSource(fragShader, 1, &fragSrc, NULL);
     glCompileShader(fragShader);
 
     // Check fragment shader
@@ -76,66 +77,14 @@ Shader::Shader(std::string vertPath, std::string fragPath) {
     std::vector<char> programError( (logLength > 1) ? logLength : 1 );
     glGetProgramInfoLog(program, logLength, NULL, &programError[0]);
     std::cout << &programError[0] << std::endl;
-
-    shaderCache[vertexPath] = vertShader;
-    shaderCache[fragmentPath] = fragShader;
-}
-
-
-//TODO throw if error
-//TODO box up redundant code
-Shader::Shader(std::string vertSrc, std::string fragSrc) {
-    GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
-    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-    GLint result = GL_FALSE;
-    int logLength;
-
-    std::cout << "Compiling vertex shader." << std::endl;
-    glShaderSource(vertShader, 1, &vertSrc.c_str(), NULL);
-    glCompileShader(vertShader);
-
-    // Check vertex shader
-    glGetShaderiv(vertShader, GL_COMPILE_STATUS, &result);
-    glGetShaderiv(vertShader, GL_INFO_LOG_LENGTH, &logLength);
-    std::vector<char> vertShaderError((logLength > 1) ? logLength : 1);
-    glGetShaderInfoLog(vertShader, logLength, NULL, &vertShaderError[0]);
-    std::cout << &vertShaderError[0] << std::endl;
-
-    std::cout << "Compiling fragment shader." << std::endl;
-    glShaderSource(fragShader, 1, &fragSrc.c_str(), NULL);
-    glCompileShader(fragShader);
-
-    // Check fragment shader
-    glGetShaderiv(fragShader, GL_COMPILE_STATUS, &result);
-    glGetShaderiv(fragShader, GL_INFO_LOG_LENGTH, &logLength);
-    std::vector<char> fragShaderError((logLength > 1) ? logLength : 1);
-    glGetShaderInfoLog(fragShader, logLength, NULL, &fragShaderError[0]);
-    std::cout << &fragShaderError[0] << std::endl;
-
-    std::cout << "Linking program." << std::endl;
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vertShader);
-    glAttachShader(program, fragShader);
-    glLinkProgram(program);
-
-    // Check shader program
-    glGetProgramiv(program, GL_LINK_STATUS, &result);
-    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
-    std::vector<char> programError( (logLength > 1) ? logLength : 1 );
-    glGetProgramInfoLog(program, logLength, NULL, &programError[0]);
-    std::cout << &programError[0] << std::endl;
-
-    glDeleteShader(vertShader);
-    glDeleteShader(fragShader);
-    programs[name] = std::make_pair(program, 1);
 }
 
 
 // explicit move may not be necessary
 Shader::Shader(Shader &&shader) 
-    :   program(shader.program),
-        vertPath(std::move(shader.vertPath),
-        fragPath(std::move(shader.fragPath)) {
+    :   program(shader.program) {
+    vertPath = std::move(shader.vertPath);
+    fragPath = std::move(shader.fragPath);
     shader.program = 0;
 }
 

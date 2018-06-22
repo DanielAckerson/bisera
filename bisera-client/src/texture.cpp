@@ -53,7 +53,7 @@ void Texture::unbind() const {
 }
 
 
-void Texture::createBuffer(const std::vector &image) {
+void Texture::createBuffer(const std::vector<unsigned char> &image) {
     glGenTextures(1, &buffer);
     bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

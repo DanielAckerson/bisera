@@ -13,7 +13,6 @@ public:
     ~Shader();
 
     Shader(std::string vertPath, std::string fragPath);
-    Shader(std::string vertSrc, std::string fragSrc);
 
     Shader(Shader &&shader);
     Shader &operator=(Shader &&shader);
