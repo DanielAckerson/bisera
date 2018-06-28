@@ -1,7 +1,7 @@
-#ifndef MAINMENU_STATE_H
-#define MAINMENU_STATE_H
+#ifndef MAINMENU_STATE_HPP
+#define MAINMENU_STATE_HPP
 
-#include "game.h"
+#include "game.hpp"
 /* #include "mesh.h" */
 /* #include "material.h" */
 
@@ -24,4 +24,4 @@ public:
     virtual void handleEvents();
 };
 
-#endif//MAINMENU_STATE_H
+#endif//MAINMENU_STATE_HPP

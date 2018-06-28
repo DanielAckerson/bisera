@@ -1,7 +1,7 @@
-#ifndef RENDER_H
-#define RENDER_H
+#ifndef RENDER_HPP
+#define RENDER_HPP
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
 #include <vector>
 
@@ -25,4 +25,4 @@ public:
     virtual void render(const std::vector<Renderable> &renderables);
 };
 
-#endif//RENDER_H
+#endif//RENDER_HPP

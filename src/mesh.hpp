@@ -1,5 +1,5 @@
-#ifndef MESH_H
-#define MESH_H
+#ifndef MESH_HPP
+#define MESH_HPP
 
 #include <glad/glad.h>
 #include <glm/vec2.hpp>
@@ -34,4 +34,4 @@ public:
     void unbind() const;
 };
 
-#endif//MESH_H
+#endif//MESH_HPP

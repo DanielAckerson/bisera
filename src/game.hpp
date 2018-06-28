@@ -1,12 +1,12 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef GAME_HPP
+#define GAME_HPP
 
 #include <chrono>   //switch to glfwGetTime if need faster clock
 #include <ratio>
 #include <vector>
 #include <memory>   //unique_ptr
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
 class Game;
 
@@ -89,4 +89,4 @@ public:
     inline void quit() { active = false; }
 };
 
-#endif//GAME_H
+#endif//GAME_HPP

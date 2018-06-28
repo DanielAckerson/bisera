@@ -11,8 +11,8 @@
 
 #include <iostream>
 
-#include "game.h"
-#include "mainmenu_state.h"
+#include "game.hpp"
+#include "mainmenu_state.hpp"
 
 int main(void)
 {

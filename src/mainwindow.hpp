@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_HPP
+#define MAINWINDOW_HPP
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -17,4 +17,4 @@ public:
     inline GLFWwindow *context() { return window; }
 };
 
-#endif//MAINWINDOW_H
+#endif//MAINWINDOW_HPP

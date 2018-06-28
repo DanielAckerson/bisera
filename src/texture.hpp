@@ -1,5 +1,5 @@
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#ifndef TEXTURE_HPP
+#define TEXTURE_HPP
 
 #include <glad/glad.h>
 #include <string>
@@ -30,4 +30,4 @@ private:
     void createBuffer(const std::vector<unsigned char> &image);
 };
 
-#endif//TEXTURE_H
+#endif//TEXTURE_HPP

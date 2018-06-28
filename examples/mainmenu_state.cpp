@@ -1,4 +1,4 @@
-#include "mainmenu_state.h"
+#include "mainmenu_state.hpp"
 
 #include <glad/glad.h>
 #include <iostream>

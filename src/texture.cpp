@@ -1,4 +1,4 @@
-#include "texture.h"
+#include "texture.hpp"
 
 #include <lodepng.h>
 #include <vector>
