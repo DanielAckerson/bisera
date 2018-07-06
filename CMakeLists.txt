@@ -7,8 +7,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
+option(BISERA_BUILD_EXAMPLES "Build the bisera example programs." ON)
+option(BISERA_BUILD_TESTS "Build the bisera test programs." ON)
+
 find_package(glfw3 3.2 REQUIRED)
 find_package(Threads REQUIRED)
 
-add_subdirectory(bisera-client)
-add_subdirectory(tests)
+add_library(glad OBJECT deps/glad.c)
+add_library(lodepng OBJECT deps/lodepng.cpp)
+include_directories(deps)
+
+include_directories(include)
+add_subdirectory(src)
+
+if(BISERA_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+if(BISERA_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

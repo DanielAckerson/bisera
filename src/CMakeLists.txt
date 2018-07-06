@@ -1,19 +1,12 @@
-set(DEPS "${PROJECT_SOURCE_DIR}/deps")
-
-set(GLAD "${DEPS}/glad/glad.h"
-    "${DEPS}/glad.c")
-
-set(LODEPNG "${DEPS}/lodepng.h"
-    "${DEPS}/lodepng.cpp")
-
 set(bisera_SRCS
-    src/bisera.cpp
-    src/game.cpp
-    src/mainmenu_state.cpp
-    src/mainwindow.cpp
-    src/mesh.cpp)
+    game.cpp
+    mainwindow.cpp
+    mesh.cpp
+    shader.cpp
+    texture.cpp)
 
-add_executable(bisera-client ${bisera_SRCS} ${GLAD} ${LODEPNG})
-target_include_directories(bisera-client PRIVATE ${DEPS})
-target_link_libraries(bisera-client glfw ${CMAKE_DL_LIBS})
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+add_library(bisera ${bisera_SRCS}
+    $<TARGET_OBJECTS:glad>
+    $<TARGET_OBJECTS:lodepng>)
+
+target_link_libraries(bisera glfw ${CMAKE_DL_LIBS})

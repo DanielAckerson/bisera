@@ -1,7 +1,7 @@
 #ifndef RENDER_HPP
 #define RENDER_HPP
 
-#include "mainwindow.hpp"
+#include <bisera/mainwindow.hpp>
 
 #include <vector>
 

@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include <bisera/game.hpp>
 
 #include <iostream>
 

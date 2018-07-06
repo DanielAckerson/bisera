@@ -1,4 +1,4 @@
-#include "mainwindow.hpp"
+#include <bisera/mainwindow.hpp>
 
 #include <iostream>
 

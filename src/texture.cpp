@@ -1,7 +1,8 @@
-#include "texture.hpp"
+#include <bisera/texture.hpp>
 
 #include <lodepng.h>
 #include <vector>
+#include <iostream>
 
 
 Texture::Texture()
@@ -15,12 +16,14 @@ Texture::~Texture() {
 
 Texture::Texture(std::string filename)
     :   buffer(0), width(0), height(0) {
+    std::cout << "loading texture" << std::endl;
     std::vector<unsigned char> image;
     unsigned int error = lodepng::decode(image, width, height, filename);
     if(error) {
         throw "error: lodepng error";
     }
     createBuffer(image);
+    std::cout << "texture loaded" << std::endl;
 }
 
 

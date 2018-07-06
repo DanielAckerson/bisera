@@ -1,4 +1,4 @@
-#include "shader.hpp"
+#include <bisera/shader.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -37,8 +37,12 @@ Shader::~Shader() {
 //TODO box up redundant code
 Shader::Shader(std::string vertPath, std::string fragPath) 
     :   vertPath(vertPath), fragPath(fragPath) {
-    const char *vertSrc = readFile(vertPath).c_str();
-    const char *fragSrc = readFile(fragPath).c_str();
+    auto vertStr = readFile(vertPath);
+    auto fragStr = readFile(fragPath);
+    auto vertSrc = vertStr.c_str();
+    auto fragSrc = fragStr.c_str();
+    std::cout << vertSrc << std::endl
+              << fragSrc << std::endl;
     GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
     GLint result = GL_FALSE;
@@ -96,6 +100,7 @@ Shader &Shader::operator=(Shader &&shader) {
     vertPath = std::move(shader.vertPath);
     fragPath = std::move(shader.fragPath);
     shader.program = 0;
+    return *this;
 }
 
 

@@ -11,10 +11,10 @@
 
 #include <iostream>
 
-#include "game.hpp"
+#include <bisera/game.hpp>
 #include "mainmenu_state.hpp"
 
-int main(void)
+int main()
 {
     try {
         Game bisera;

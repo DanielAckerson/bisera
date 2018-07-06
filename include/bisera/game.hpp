@@ -6,7 +6,7 @@
 #include <vector>
 #include <memory>   //unique_ptr
 
-#include "mainwindow.hpp"
+#include <bisera/mainwindow.hpp>
 
 class Game;
 

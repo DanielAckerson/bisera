@@ -1,12 +1,11 @@
 link_libraries(bisera)
 
-add_executable(loadtextures_test
-    loadtextures_test.cpp
-    $<TARGET_OBJECTS:glad>
-    $<TARGET_OBJECTS:lodepng>)
+set(bisera_game_SRCS
+    bisera-game.cpp
+    mainmenu_state.cpp)
 
-add_executable(loadtextures
-    loadtextures.cpp
+add_executable(bisera-game
+    ${bisera_game_SRCS}
     $<TARGET_OBJECTS:glad>
     $<TARGET_OBJECTS:lodepng>)
 

@@ -1,7 +1,7 @@
 #ifndef MAINMENU_STATE_HPP
 #define MAINMENU_STATE_HPP
 
-#include "game.hpp"
+#include <bisera/game.hpp>
 /* #include "mesh.h" */
 /* #include "material.h" */
 

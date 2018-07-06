@@ -1,4 +1,4 @@
-#include "mesh.hpp"
+#include <bisera/mesh.hpp>
 
 #include <iostream>
 #include <fstream>
