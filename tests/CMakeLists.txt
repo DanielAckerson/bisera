@@ -1,12 +1,7 @@
 link_libraries(bisera)
 
-add_executable(loadtextures_test
-    loadtextures_test.cpp
-    $<TARGET_OBJECTS:glad>
-    $<TARGET_OBJECTS:lodepng>)
-
-add_executable(loadtextures
-    loadtextures.cpp
+add_executable(textures
+    textures.cpp
     $<TARGET_OBJECTS:glad>
     $<TARGET_OBJECTS:lodepng>)
 

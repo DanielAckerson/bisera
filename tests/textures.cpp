@@ -36,9 +36,9 @@ vector<unsigned char> colors = {
     MainWindow window;
     Mesh mesh(vertices, indices);
     Shader basicShader(
-        "assets/loadtextures.vs",
-        "assets/loadtextures.fs");
-    Texture texture1("assets/loadtextures_checkered.png");
+        "assets/textures.vs",
+        "assets/textures.fs");
+    Texture texture1("assets/checkered.png");
     Texture texture2(2, 2, colors);
 
     mesh.bind();
