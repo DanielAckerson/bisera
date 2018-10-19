@@ -1,5 +1,4 @@
-#ifndef TEXTURE_HPP
-#define TEXTURE_HPP
+#pragma once
 
 #include <glad/glad.h>
 #include <string>
@@ -28,5 +27,3 @@ public:
 private:
     void createBuffer(const std::vector<unsigned char> &image);
 };
-
-#endif//TEXTURE_HPP

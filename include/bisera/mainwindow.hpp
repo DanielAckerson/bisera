@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_HPP
-#define MAINWINDOW_HPP
+#pragma once
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -16,5 +15,3 @@ public:
 public:
     inline GLFWwindow *context() { return window; }
 };
-
-#endif//MAINWINDOW_HPP

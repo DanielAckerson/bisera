@@ -1,5 +1,4 @@
-#ifndef SHADER_HPP
-#define SHADER_HPP
+#pragma once
 
 #include <glad/glad.h>
 #include <string>
@@ -17,7 +16,6 @@ public:
     Shader(Shader &&shader);
     Shader &operator=(Shader &&shader);
 
-    //disable copying
     Shader(const Shader &) = delete;
     Shader &operator=(const Shader &) = delete;
 
@@ -25,5 +23,3 @@ public:
     void bind() const;
     void reload();
 };
-
-#endif//SHADER_HPP

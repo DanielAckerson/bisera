@@ -1,5 +1,4 @@
-#ifndef RENDER_HPP
-#define RENDER_HPP
+#pragma once
 
 #include <bisera/mainwindow.hpp>
 

@@ -6,52 +6,59 @@
 
 
 Texture::Texture()
-    :   buffer(0), width(0), height(0) {}
+:   buffer(0), width(0), height(0)
+{ }
 
 
-Texture::~Texture() {
+Texture::~Texture()
+{
     glDeleteTextures(1, &buffer);
 }
 
 
 Texture::Texture(std::string filename)
-    :   buffer(0), width(0), height(0) {
+:   buffer(0), width(0), height(0)
+{
     std::cout << "loading texture" << std::endl;
     std::vector<unsigned char> image;
     unsigned int error = lodepng::decode(image, width, height, filename);
-    if(error) {
+    if (error)
         throw "error: lodepng error";
-    }
     createBuffer(image);
     std::cout << "texture loaded" << std::endl;
 }
 
 
 Texture::Texture(unsigned int width, unsigned int height, const std::vector<unsigned char> &image)
-    :   buffer(0), width(width), height(height) {
+:   buffer(0), width(width), height(height)
+{
     createBuffer(image);
 }
 
 
-Texture::Texture(Texture &&texture) {
+Texture::Texture(Texture &&texture)
+{
     buffer = texture.buffer;
     texture.buffer = 0;
 }
 
 
-Texture &Texture::operator=(Texture &&texture) {
+Texture &Texture::operator=(Texture &&texture)
+{
     buffer = texture.buffer;
     texture.buffer = 0;
     return *this;
 }
 
 
-void Texture::bind() const {
+void Texture::bind() const
+{
     glBindTexture(GL_TEXTURE_2D, buffer);
 }
 
 
-void Texture::createBuffer(const std::vector<unsigned char> &image) {
+void Texture::createBuffer(const std::vector<unsigned char> &image)
+{
     glGenTextures(1, &buffer);
     bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

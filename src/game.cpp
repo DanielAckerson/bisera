@@ -2,10 +2,11 @@
 
 #include <iostream>
 
-Game::Game() {
+Game::Game()
+{
     try {
         window = std::make_unique<MainWindow>();
-    } catch(const char *err) {
+    } catch (const char *err) {
         std::cerr << err << std::endl;
         throw "error: failed to create game";
     }
@@ -14,29 +15,31 @@ Game::Game() {
 }
 
 
-Game::~Game() {
+Game::~Game()
+{
     std::cout << "Game destroyed!" << std::endl;
 }
 
 
 //TODO loop only when active && there is at least one game state
-void Game::start() {
+void Game::start()
+{
     using namespace std::chrono;
     const Tick dt(1.0);
     Tick accumulator(0.0);
     auto currentTime = Clock::now();
     int updates = 0;
     int fps = 0;
-    while(active) {
+    while (active) {
         auto newTime = Clock::now();
         auto frameTime = duration_cast<Tick>(newTime - currentTime);
         currentTime = newTime;
         accumulator += frameTime;
-        while(accumulator >= dt) {
+        while (accumulator >= dt) {
             handleEvents();
             update();
             accumulator -= dt;
-            if(++updates >= 100) {
+            if (++updates >= 100) {
                 std::cout << fps << "fps"  << std::endl;
                 updates = 0;
                 fps = 0;
@@ -50,21 +53,24 @@ void Game::start() {
 
 // if previous state, assumes paused
 // else pushes new state
-void Game::changeState(GameState *state) {
-    if(!states.empty())
+void Game::changeState(GameState *state)
+{
+    if (!states.empty())
         states.pop_back();
     states.emplace_back(state);
 }
 
 
-void Game::pushState(GameState *state) {
+void Game::pushState(GameState *state)
+{
     pause();
     states.emplace_back(state);
 }
 
 
-void Game::popState() {
-    if(!states.empty())
+void Game::popState()
+{
+    if (!states.empty())
         states.pop_back();
     else
         throw "error: no GameState to pop";
@@ -72,19 +78,22 @@ void Game::popState() {
 }
 
 
-void Game::pause() {
-    if(!states.empty())
+void Game::pause()
+{
+    if (!states.empty())
         states.back()->pause();
 }
 
 
-void Game::resume() {
-    if(!states.empty())
+void Game::resume()
+{
+    if (!states.empty())
         states.back()->resume();
 }
 
 
-void Game::render() {
+void Game::render()
+{
     /* Render here */
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -105,8 +114,9 @@ void Game::render() {
 }
 
 
-void Game::update() {
-    if(glfwWindowShouldClose(window->context())) {
+void Game::update()
+{
+    if (glfwWindowShouldClose(window->context())) {
         quit();
         return;
     }
@@ -114,7 +124,8 @@ void Game::update() {
 }
 
 
-void Game::handleEvents() {
+void Game::handleEvents()
+{
     //Poll for and process events
     glfwPollEvents();
     states.back()->handleEvents();

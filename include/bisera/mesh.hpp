@@ -1,5 +1,4 @@
-#ifndef MESH_HPP
-#define MESH_HPP
+#pragma once
 
 #include <glad/glad.h>
 #include <glm/vec2.hpp>
@@ -42,5 +41,3 @@ private:
     void readObjFile(std::vector<Vertex> &vertices, std::vector<Face> &faces);
     void makeGlObject(const std::vector<Vertex> &vertices, const std::vector<Face> &faces);
 };
-
-#endif//MESH_HPP

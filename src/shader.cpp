@@ -7,15 +7,16 @@
 
 /* helper function for reading shaders
  */
-std::string readFile(const std::string &filePath) {
+std::string readFile(const std::string &filePath)
+{
     std::string content;
     std::ifstream fileStream(filePath, std::ios::in);
-    if(!fileStream.is_open()) {
+    if (!fileStream.is_open()) {
         std::cerr << "Could not read file " << filePath << ". File does not exist." << std::endl;
         return "";
     }
     std::string line = "";
-    while(!fileStream.eof()) {
+    while (!fileStream.eof()) {
         std::getline(fileStream, line);
         content.append(line + "\n");
     }
@@ -25,10 +26,12 @@ std::string readFile(const std::string &filePath) {
 
 
 Shader::Shader()
-    :   program(0) {}
+:   program(0)
+{ }
 
 
-Shader::~Shader() {
+Shader::~Shader()
+{
     glDeleteProgram(program);
 }
 
@@ -36,7 +39,8 @@ Shader::~Shader() {
 //TODO throw if error
 //TODO box up redundant code
 Shader::Shader(std::string vertPath, std::string fragPath) 
-    :   vertPath(vertPath), fragPath(fragPath) {
+:   vertPath(vertPath), fragPath(fragPath)
+{
     auto vertStr = readFile(vertPath);
     auto fragStr = readFile(fragPath);
     auto vertSrc = vertStr.c_str();
@@ -87,7 +91,8 @@ Shader::Shader(std::string vertPath, std::string fragPath)
 
 // explicit move may not be necessary
 Shader::Shader(Shader &&shader) 
-    :   program(shader.program) {
+:   program(shader.program)
+{
     vertPath = std::move(shader.vertPath);
     fragPath = std::move(shader.fragPath);
     shader.program = 0;
@@ -95,7 +100,8 @@ Shader::Shader(Shader &&shader)
 
 
 // explicit move may not be necessary
-Shader &Shader::operator=(Shader &&shader) {
+Shader &Shader::operator=(Shader &&shader)
+{
     program = shader.program;
     vertPath = std::move(shader.vertPath);
     fragPath = std::move(shader.fragPath);
@@ -104,11 +110,13 @@ Shader &Shader::operator=(Shader &&shader) {
 }
 
 
-void Shader::bind() const {
+void Shader::bind() const
+{
     glUseProgram(program);
 }
 
 
 //TODO Create new shader then move if OK
-void Shader::reload() {
+void Shader::reload()
+{
 }

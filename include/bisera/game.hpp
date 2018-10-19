@@ -1,5 +1,4 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#pragma once
 
 #include <chrono>   //switch to glfwGetTime if need faster clock
 #include <ratio>
@@ -37,7 +36,6 @@ public:
     Game();
     ~Game();
 
-    //prevent copying
     Game(const Game &) = delete;
     Game &operator=(const Game &) = delete;
 
@@ -88,5 +86,3 @@ public:
     inline bool isActive() const { return active; }
     inline void quit() { active = false; }
 };
-
-#endif//GAME_HPP
