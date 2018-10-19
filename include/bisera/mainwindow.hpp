@@ -3,15 +3,18 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-class MainWindow {
-    GLFWwindow *window;
-    GLFWmonitor *monitor;
-    GLuint width, height;
+namespace bisera
+{
+    class MainWindow {
+        GLFWwindow *window = nullptr;
+        GLFWmonitor *monitor = nullptr;
+        GLuint width, height;
 
-public:
-    MainWindow();
-    ~MainWindow();
+    public:
+        MainWindow();
+        ~MainWindow();
 
-public:
-    inline GLFWwindow *context() { return window; }
-};
+    public:
+        inline GLFWwindow *context() { return window; }
+    };
+}

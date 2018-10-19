@@ -5,8 +5,6 @@
  *
  *  should support bare minimum opengl 3.0
  *      https://www.khronos.org/opengl/wiki/History_of_OpenGL#OpenGL_3.0_.282008.29
- *
- *  think about switching from GLEW to glad
  */
 
 #include <iostream>
@@ -17,7 +15,7 @@
 int main()
 {
     try {
-        Game bisera;
+        bisera::Game bisera;
         bisera.pushState(new MainMenu_State(&bisera));
         bisera.start();
     } catch(const char *err) {

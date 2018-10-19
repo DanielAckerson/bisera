@@ -1,18 +1,17 @@
-#ifndef MAINMENU_STATE_HPP
-#define MAINMENU_STATE_HPP
+#pragma once
 
 #include <bisera/game.hpp>
 /* #include "mesh.h" */
 /* #include "material.h" */
 
-class MainMenu_State : public GameState {
+class MainMenu_State : public bisera::GameState {
     /* Mesh mesh_background; */
     /* Mesh mesh_buttons; */
     /* Material mat_background; */
     /* Material mat_buttons; */
 
 public:
-    MainMenu_State(Game *game);
+    MainMenu_State(bisera::Game *game);
     ~MainMenu_State();
 
 public:
@@ -23,5 +22,3 @@ public:
     virtual void update();
     virtual void handleEvents();
 };
-
-#endif//MAINMENU_STATE_HPP

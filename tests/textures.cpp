@@ -7,9 +7,10 @@
 using namespace std;
 
 
-int main() {
-    vector<Mesh::Vertex> vertices = {
-        //  Position------------   Normals--------   Texcoords--
+int main()
+{
+    vector<bisera::Mesh::Vertex> vertices {
+        // Position----------   Normals--------   Texcoords--
         {{-0.5f,  0.5f, 0.0f}, {1.0f,1.0f,1.0f}, {0.0f, 0.0f}}, // 0 Top-left
         {{ 0.5f,  0.5f, 0.0f}, {1.0f,1.0f,1.0f}, {1.0f, 0.0f}}, // 1 Top-right
         {{ 0.5f, -0.5f, 0.0f}, {1.0f,1.0f,1.0f}, {1.0f, 1.0f}}, // 2 Bottom-right
@@ -18,25 +19,25 @@ int main() {
 
 
     // these refer to the vertex array
-    vector<Mesh::Face> faces = {
+    vector<bisera::Mesh::Face> faces {
         {0, 1, 2},  // Top-left triangle
         {2, 3, 0}   // Bottom-right triangle
     };
 
 
-    MainWindow window;
-    Mesh mesh(vertices, faces);
-    Shader basicShader(
-            "assets/textures.vs",
-            "assets/textures.fs");
-    Texture texture1("assets/checkered.png");
+    bisera::MainWindow window;
+    bisera::Mesh mesh(vertices, faces);
+    bisera::Shader basicShader(
+        "assets/textures.vs",
+        "assets/textures.fs");
+    bisera::Texture texture1("assets/checkered.png");
 
     mesh.bind();
     texture1.bind();
     basicShader.bind();
 
     //render
-    while(!glfwWindowShouldClose(window.context())) {
+    while (!glfwWindowShouldClose(window.context())) {
         glfwPollEvents();
         glClear(GL_COLOR_BUFFER_BIT);
         //draws currently bound element array buffer

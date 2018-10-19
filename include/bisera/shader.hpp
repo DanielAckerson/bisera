@@ -3,23 +3,26 @@
 #include <glad/glad.h>
 #include <string>
 
-class Shader {
-    GLuint program;
-    std::string vertPath, fragPath;
+namespace bisera
+{
+    class Shader {
+        GLuint program = 0;
+        std::string vertPath, fragPath;
 
-public:
-    Shader();
-    ~Shader();
+    public:
+        Shader();
+        ~Shader();
 
-    Shader(std::string vertPath, std::string fragPath);
+        Shader(std::string vertPath, std::string fragPath);
 
-    Shader(Shader &&shader);
-    Shader &operator=(Shader &&shader);
+        Shader(Shader &&shader);
+        Shader &operator=(Shader &&shader);
 
-    Shader(const Shader &) = delete;
-    Shader &operator=(const Shader &) = delete;
+        Shader(const Shader &) = delete;
+        Shader &operator=(const Shader &) = delete;
 
-public:
-    void bind() const;
-    void reload();
-};
+    public:
+        void bind() const;
+        void reload();
+    };
+}

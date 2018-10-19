@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <iostream>
 
-MainMenu_State::MainMenu_State(Game *game)
+MainMenu_State::MainMenu_State(bisera::Game *game)
 :   GameState(game) {
     //TODO init meshes and materials
     std::cout << "main menu state created" << std::endl;

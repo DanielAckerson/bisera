@@ -5,9 +5,8 @@
 #include <vector>
 #include <utility>
 
-/* helper function for reading shaders
- */
-std::string readFile(const std::string &filePath)
+
+static std::string readFile(const std::string &filePath)
 {
     std::string content;
     std::ifstream fileStream(filePath, std::ios::in);
@@ -24,99 +23,100 @@ std::string readFile(const std::string &filePath)
     return content;
 }
 
-
-Shader::Shader()
-:   program(0)
-{ }
-
-
-Shader::~Shader()
+namespace bisera
 {
-    glDeleteProgram(program);
-}
+    Shader::Shader()
+    { }
 
 
-//TODO throw if error
-//TODO box up redundant code
-Shader::Shader(std::string vertPath, std::string fragPath) 
-:   vertPath(vertPath), fragPath(fragPath)
-{
-    auto vertStr = readFile(vertPath);
-    auto fragStr = readFile(fragPath);
-    auto vertSrc = vertStr.c_str();
-    auto fragSrc = fragStr.c_str();
-    std::cout << vertSrc << std::endl
-              << fragSrc << std::endl;
-    GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
-    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-    GLint result = GL_FALSE;
-    int logLength;
-
-    std::cout << "Compiling vertex shader." << std::endl;
-    glShaderSource(vertShader, 1, &vertSrc, NULL);
-    glCompileShader(vertShader);
-
-    // Check vertex shader
-    glGetShaderiv(vertShader, GL_COMPILE_STATUS, &result);
-    glGetShaderiv(vertShader, GL_INFO_LOG_LENGTH, &logLength);
-    std::vector<char> vertShaderError((logLength > 1) ? logLength : 1);
-    glGetShaderInfoLog(vertShader, logLength, NULL, &vertShaderError[0]);
-    std::cout << &vertShaderError[0] << std::endl;
-
-    std::cout << "Compiling fragment shader." << std::endl;
-    glShaderSource(fragShader, 1, &fragSrc, NULL);
-    glCompileShader(fragShader);
-
-    // Check fragment shader
-    glGetShaderiv(fragShader, GL_COMPILE_STATUS, &result);
-    glGetShaderiv(fragShader, GL_INFO_LOG_LENGTH, &logLength);
-    std::vector<char> fragShaderError((logLength > 1) ? logLength : 1);
-    glGetShaderInfoLog(fragShader, logLength, NULL, &fragShaderError[0]);
-    std::cout << &fragShaderError[0] << std::endl;
-
-    std::cout << "Linking program." << std::endl;
-    program = glCreateProgram();
-    glAttachShader(program, vertShader);
-    glAttachShader(program, fragShader);
-    glLinkProgram(program);
-
-    // Check shader program
-    glGetProgramiv(program, GL_LINK_STATUS, &result);
-    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
-    std::vector<char> programError( (logLength > 1) ? logLength : 1 );
-    glGetProgramInfoLog(program, logLength, NULL, &programError[0]);
-    std::cout << &programError[0] << std::endl;
-}
+    Shader::~Shader()
+    {
+        glDeleteProgram(program);
+    }
 
 
-// explicit move may not be necessary
-Shader::Shader(Shader &&shader) 
-:   program(shader.program)
-{
-    vertPath = std::move(shader.vertPath);
-    fragPath = std::move(shader.fragPath);
-    shader.program = 0;
-}
+    //TODO throw if error
+    //TODO box up redundant code
+    Shader::Shader(std::string vertPath, std::string fragPath) 
+    :   vertPath(vertPath), fragPath(fragPath)
+    {
+        auto vertStr = readFile(vertPath);
+        auto fragStr = readFile(fragPath);
+        auto vertSrc = vertStr.c_str();
+        auto fragSrc = fragStr.c_str();
+        std::cout << vertSrc << std::endl
+                  << fragSrc << std::endl;
+        GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
+        GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+        GLint result = GL_FALSE;
+        int logLength;
+
+        std::cout << "Compiling vertex shader." << std::endl;
+        glShaderSource(vertShader, 1, &vertSrc, NULL);
+        glCompileShader(vertShader);
+
+        // Check vertex shader
+        glGetShaderiv(vertShader, GL_COMPILE_STATUS, &result);
+        glGetShaderiv(vertShader, GL_INFO_LOG_LENGTH, &logLength);
+        std::vector<char> vertShaderError((logLength > 1) ? logLength : 1);
+        glGetShaderInfoLog(vertShader, logLength, NULL, &vertShaderError[0]);
+        std::cout << &vertShaderError[0] << std::endl;
+
+        std::cout << "Compiling fragment shader." << std::endl;
+        glShaderSource(fragShader, 1, &fragSrc, NULL);
+        glCompileShader(fragShader);
+
+        // Check fragment shader
+        glGetShaderiv(fragShader, GL_COMPILE_STATUS, &result);
+        glGetShaderiv(fragShader, GL_INFO_LOG_LENGTH, &logLength);
+        std::vector<char> fragShaderError((logLength > 1) ? logLength : 1);
+        glGetShaderInfoLog(fragShader, logLength, NULL, &fragShaderError[0]);
+        std::cout << &fragShaderError[0] << std::endl;
+
+        std::cout << "Linking program." << std::endl;
+        program = glCreateProgram();
+        glAttachShader(program, vertShader);
+        glAttachShader(program, fragShader);
+        glLinkProgram(program);
+
+        // Check shader program
+        glGetProgramiv(program, GL_LINK_STATUS, &result);
+        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+        std::vector<char> programError( (logLength > 1) ? logLength : 1 );
+        glGetProgramInfoLog(program, logLength, NULL, &programError[0]);
+        std::cout << &programError[0] << std::endl;
+    }
 
 
-// explicit move may not be necessary
-Shader &Shader::operator=(Shader &&shader)
-{
-    program = shader.program;
-    vertPath = std::move(shader.vertPath);
-    fragPath = std::move(shader.fragPath);
-    shader.program = 0;
-    return *this;
-}
+    // explicit move may not be necessary
+    Shader::Shader(Shader &&shader) 
+    :   program(shader.program)
+    {
+        vertPath = std::move(shader.vertPath);
+        fragPath = std::move(shader.fragPath);
+        shader.program = 0;
+    }
 
 
-void Shader::bind() const
-{
-    glUseProgram(program);
-}
+    // explicit move may not be necessary
+    Shader &Shader::operator=(Shader &&shader)
+    {
+        program = shader.program;
+        vertPath = std::move(shader.vertPath);
+        fragPath = std::move(shader.fragPath);
+        shader.program = 0;
+        return *this;
+    }
 
 
-//TODO Create new shader then move if OK
-void Shader::reload()
-{
+    void Shader::bind() const
+    {
+        glUseProgram(program);
+    }
+
+
+    //TODO Create new shader then move if OK
+    void Shader::reload()
+    {
+    }
 }
