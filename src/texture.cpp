@@ -51,11 +51,6 @@ void Texture::bind() const {
 }
 
 
-void Texture::unbind() const {
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-
 void Texture::createBuffer(const std::vector<unsigned char> &image) {
     glGenTextures(1, &buffer);
     bind();
@@ -73,5 +68,4 @@ void Texture::createBuffer(const std::vector<unsigned char> &image) {
         GL_RGBA,
         GL_UNSIGNED_BYTE,
         image.data());
-    unbind();
 }

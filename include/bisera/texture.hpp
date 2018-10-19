@@ -24,7 +24,6 @@ public:
 
 public:
     void bind() const;
-    void unbind() const;
 
 private:
     void createBuffer(const std::vector<unsigned char> &image);

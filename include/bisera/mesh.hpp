@@ -5,10 +5,13 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <vector>
+#include <array>
 #include <string>
 
 class Mesh {
     GLuint vao, vbo, ebo;
+    unsigned int element_count;
+    std::string filename;
 
 public:
     struct Vertex {
@@ -17,11 +20,13 @@ public:
         glm::vec2 uv;
     };
 
+    using Face = std::array<unsigned int, 3>;
+
 public:
     Mesh();
     ~Mesh();
-    Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices);
-    Mesh(const std::string &objFilePath);
+    Mesh(const std::vector<Vertex> &vertices, const std::vector<Face> &faces);
+    Mesh(std::string objFilePath);
 
     Mesh(Mesh &&mesh);
     Mesh &operator=(Mesh &&mesh);
@@ -31,7 +36,11 @@ public:
 
 public:
     void bind() const;
-    void unbind() const;
+    unsigned int elementCount() const;
+
+private:
+    void readObjFile(std::vector<Vertex> &vertices, std::vector<Face> &faces);
+    void makeGlObject(const std::vector<Vertex> &vertices, const std::vector<Face> &faces);
 };
 
 #endif//MESH_HPP
