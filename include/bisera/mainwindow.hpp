@@ -8,7 +8,7 @@ namespace bisera
     class MainWindow {
         GLFWwindow *window = nullptr;
         GLFWmonitor *monitor = nullptr;
-        GLuint width, height;
+        unsigned int width, height;
 
     public:
         MainWindow();

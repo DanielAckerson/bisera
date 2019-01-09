@@ -6,12 +6,7 @@ namespace bisera
 {
     Game::Game()
     {
-        try {
-            window = std::make_unique<MainWindow>();
-        } catch (const char *err) {
-            std::cerr << err << std::endl;
-            throw "error: failed to create game";
-        }
+        window = std::make_unique<MainWindow>();    // throws
         active = true;
         std::cout << "Game created!" << std::endl;
     }

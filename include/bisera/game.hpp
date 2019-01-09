@@ -3,7 +3,7 @@
 #include <chrono>
 #include <ratio>
 #include <vector>
-#include <memory>   //unique_ptr
+#include <memory>
 
 #include <bisera/mainwindow.hpp>
 

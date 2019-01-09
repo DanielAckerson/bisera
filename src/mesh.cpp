@@ -14,7 +14,7 @@ namespace bisera
     {
         glDeleteBuffers(1, &ebo);
         glDeleteBuffers(1, &vbo);
-        glDeleteVertexArrays(1,&vao);
+        glDeleteVertexArrays(1, &vao);
     }
 
 

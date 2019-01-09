@@ -5,7 +5,8 @@ project(bisera)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
+add_compile_options(-Wall -Wextra)
 
 option(BISERA_BUILD_EXAMPLES "Build the bisera example programs." ON)
 option(BISERA_BUILD_TESTS "Build the bisera test programs." ON)

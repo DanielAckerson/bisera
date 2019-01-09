@@ -1,7 +1,6 @@
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
 #include <bisera/mainwindow.hpp>
 #include <bisera/texture.hpp>
 #include <bisera/mesh.hpp>
