@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 
-#include <bisera/mainwindow.hpp>
+#include <bisera/renderer.hpp>
 
 namespace bisera
 {
@@ -31,11 +31,11 @@ namespace bisera
 
     class Game {
         std::vector<std::unique_ptr<GameState>> states;
-        std::unique_ptr<MainWindow> window;
+        std::unique_ptr<Renderer> renderer;
         bool active;
 
     public:
-        Game();
+        Game(Renderer *renderer);
         ~Game();
 
         Game(const Game &) = delete;

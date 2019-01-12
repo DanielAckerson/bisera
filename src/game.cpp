@@ -4,10 +4,9 @@
 
 namespace bisera
 {
-    Game::Game()
+    Game::Game(Renderer *renderer)
+    :   renderer(renderer)
     {
-        window = std::make_unique<MainWindow>();    // throws
-        active = true;
         std::cout << "Game created!" << std::endl;
     }
 
@@ -27,6 +26,7 @@ namespace bisera
         auto currentTime = Clock::now();
         int ups = 0;
         int fps = 0;
+        active = true;
         while (active) {
             auto newTime = Clock::now();
             auto frameTime = duration_cast<Tick>(newTime - currentTime);
@@ -91,32 +91,14 @@ namespace bisera
 
     void Game::render()
     {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        /* render top state.
-         * top state is responsible for rendering any
-         *  states that should be rendered in background
-         *  (e.g. pauseMenu is top state but the paused
-         *  world is still rendered in background).
-         */
+        renderer->clear();
         states.back()->render();
-
-        /* Swap front and back buffers
-         * Vsync by default
-         * to turn off Vsync set glfwSwapInterval(0)
-         * to turn back on, set glfwSwapInterval(1) (i think)
-         */
-        glfwSwapBuffers(window->context());
+        renderer->swapBuffers();
     }
 
 
     void Game::update()
     {
-        if (glfwWindowShouldClose(window->context())) {
-            quit();
-            return;
-        }
         states.back()->update();
     }
 
@@ -124,7 +106,6 @@ namespace bisera
     void Game::handleEvents()
     {
         //Poll for and process events
-        glfwPollEvents();
         states.back()->handleEvents();
     }
 }

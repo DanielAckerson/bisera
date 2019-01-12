@@ -8,17 +8,43 @@
  */
 
 #include <iostream>
+#include <memory>
 
+#include <bisera/renderer.hpp>
+#include <bisera/mainwindow.hpp>
 #include <bisera/game.hpp>
+
 #include "mainmenu_state.hpp"
+
+class MyRenderer : public bisera::Renderer {
+    GLFWwindow *window;
+
+public:
+    MyRenderer(GLFWwindow *window)
+    :   window(window)
+    { }
+
+    virtual void clear()
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    virtual void swapBuffers()
+    {
+        glfwSwapBuffers(window);
+    }
+};
+
 
 int main()
 {
     try {
-        bisera::Game bisera;
+        bisera::MainWindow window;
+        MyRenderer renderer(window.context());
+        bisera::Game bisera(&renderer);
         bisera.pushState(new MainMenu_State(&bisera));
         bisera.start();
-    } catch(const char *err) {
+    } catch (char const *err) {
         std::cerr << err << std::endl;
         return 1;
     }
